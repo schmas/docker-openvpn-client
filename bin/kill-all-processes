@@ -1,0 +1,70 @@
+#!/usr/bin/python3 -u
+import errno
+import os
+import os.path
+import signal
+import sys
+
+KILL_ALL_PROCESSES_TIMEOUT = 5
+
+LOG_LEVEL_ERROR = 1
+LOG_LEVEL_WARN = 1
+LOG_LEVEL_INFO = 2
+LOG_LEVEL_DEBUG = 3
+
+log_level = LOG_LEVEL_DEBUG
+
+
+class AlarmException(Exception):
+    pass
+
+
+def error(message):
+    if log_level >= LOG_LEVEL_ERROR:
+        sys.stderr.write("*** %s\n" % message)
+
+
+def warn(message):
+    if log_level >= LOG_LEVEL_WARN:
+        sys.stderr.write("*** %s\n" % message)
+
+
+def info(message):
+    if log_level >= LOG_LEVEL_INFO:
+        sys.stderr.write("*** %s\n" % message)
+
+
+def debug(message):
+    if log_level >= LOG_LEVEL_DEBUG:
+        sys.stderr.write("*** %s\n" % message)
+
+
+def kill_all_processes(time_limit):
+    info("Killing all processes...")
+    try:
+        os.kill(-1, signal.SIGTERM)
+    except OSError:
+        pass
+    signal.alarm(time_limit)
+    try:
+        # Wait until no more child processes exist.
+        done = False
+        while not done:
+            try:
+                os.waitpid(-1, 0)
+            except OSError as e:
+                if e.errno == errno.ECHILD:
+                    done = True
+                else:
+                    raise
+    except AlarmException:
+        warn("Not all processes have exited in time. Forcing them to exit.")
+        try:
+            os.kill(-1, signal.SIGKILL)
+        except OSError:
+            pass
+    finally:
+        signal.alarm(0)
+
+
+kill_all_processes(KILL_ALL_PROCESSES_TIMEOUT)
