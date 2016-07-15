@@ -4,5 +4,11 @@ services:
     container_name: openvpn-client
     build: .
     image: dceschmidt/openvpn-client
+    restart: always
     ports:
-     - "222:22"
+      - "222:22"
+    environment:
+      OPENVPN_PROVIDER: PUREVPN
+      OPENVPN_USERNAME: username
+      OPENVPN_PASSWORD: password
+      OPENVPN_OPTS: "--inactive 3600 --ping 10 --ping-exit 60"

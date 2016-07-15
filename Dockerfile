@@ -42,7 +42,11 @@ EXPOSE 22
 # Add configuration and scripts
 ADD openvpn /etc/openvpn
 
+# Running scripts during container startup
+RUN mkdir -p /etc/my_init.d
+ADD openvpn/openvpn-setup.sh /etc/my_init.d/openvpn-setup.sh
+
 # Add to runit
-#RUN mkdir /etc/service/openvpn
-#ADD openvpn/start.sh /etc/service/openvpn/run
-#RUN chmod +x /etc/service/openvpn/run
+RUN mkdir /etc/service/openvpn
+ADD openvpn/openvpn-run.sh /etc/service/openvpn/run
+RUN chmod +x /etc/service/openvpn/run
