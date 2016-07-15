@@ -41,21 +41,24 @@ EXPOSE 22
 VOLUME /config
 
 # Adding utils scripts to bin
-ADD bin/kill-all-processes /usr/local/bin/kill-all-processes
-ADD bin/ssh-restart /usr/local/bin/ssh-restart
+ADD bin/ /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
 # Add configuration and scripts
 ADD openvpn /etc/openvpn
-RUN chmod +x /etc/openvpn/*.sh
+RUN chmod +x /etc/openvpn/bin/* \
+    && mkdir -p /etc/openvpn/up \
+    && mkdir -p /etc/openvpn/down \
+    && ln -s /usr/local/bin/ssh-restart /etc/openvpn/up/ssh-restart
 
 # Running scripts during container startup
-RUN mkdir -p /etc/my_init.d
-ADD openvpn/openvpn-setup.sh /etc/my_init.d/openvpn-setup.sh
+RUN mkdir -p /etc/my_init.d \
+    && ln -s /etc/openvpn/bin/openvpn-setup.sh /etc/my_init.d/openvpn-setup.sh \
+    && chmod +x /etc/my_init.d/*
 
 # Add to runit
-RUN mkdir /etc/service/openvpn
-ADD openvpn/openvpn-run.sh /etc/service/openvpn/run
-ADD openvpn/openvpn-finish.sh /etc/service/openvpn/finish
-RUN chmod +x /etc/service/openvpn/run
-RUN chmod +x /etc/service/openvpn/finish
+RUN mkdir /etc/service/openvpn \
+    && ln -s /etc/openvpn/bin/openvpn-run.sh /etc/service/openvpn/run \
+    && ln -s /etc/openvpn/bin/openvpn-finish.sh /etc/service/openvpn/finish \
+    && chmod +x /etc/service/openvpn/run \
+    && chmod +x /etc/service/openvpn/finish

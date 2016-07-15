@@ -7,7 +7,7 @@ services:
     privileged: true
     restart: always
     ports:
-      - "222:22"
+      - "1022:22"
     dns:
       - 8.8.8.8
       - 8.8.4.4
