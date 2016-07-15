@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "VPN IP information:"
+curl -s -p ipinfo.io/$4
+echo
+echo

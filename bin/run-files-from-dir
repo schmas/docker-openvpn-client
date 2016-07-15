@@ -9,13 +9,15 @@ def main(args_inner):
     export_envvars()
 
     if args_inner.directory:
-        run_files_from_dir(args_inner.directory)
+        run_files_from_dir(args_inner.directory, args_inner.script_args)
 
 
 # Parse options.
 parser = argparse.ArgumentParser(description='Run scripts.')
 parser.add_argument('directory', metavar='DIRECTORY', type=str,
                     help='Directory which will scan and run scripts')
+parser.add_argument('script_args', metavar='SCRIPT_ARGS', type=str, nargs='*',
+                    help='Script args')
 parser.add_argument('--quiet', dest='log_level',
                     action='store_const', const=LOG_LEVEL_WARN, default=LOG_LEVEL_INFO,
                     help='Only print warnings and errors')

@@ -49,7 +49,8 @@ ADD openvpn /etc/openvpn
 RUN chmod +x /etc/openvpn/bin/* \
     && mkdir -p /etc/openvpn/up \
     && mkdir -p /etc/openvpn/down \
-    && ln -s /usr/local/bin/ssh-restart /etc/openvpn/up/ssh-restart
+    && ln -s /usr/local/bin/ssh-restart /etc/openvpn/up/00-ssh-restart \
+    && ln -s /usr/local/bin/my-public-ip-info /etc/openvpn/up/01-my-public-ip-info
 
 # Running scripts during container startup
 RUN mkdir -p /etc/my_init.d \

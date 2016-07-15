@@ -244,9 +244,9 @@ def kill_all_processes(time_limit):
         signal.alarm(0)
 
 
-def run_files_from_dir(directory):
+def run_files_from_dir(directory, script_args=None):
     for name in listdir(directory):
         filename = os.path.join(directory, name)
         if is_exe(filename):
-            info("Running %s..." % filename)
-            run_command_killable_and_import_envvars(filename)
+            info("Running %s %s ..." % (filename, ' '.join(script_args)))
+            run_command_killable_and_import_envvars(filename, *script_args)
