@@ -1,0 +1,8 @@
+version: '2'
+services:
+  openvpn-client:
+    container_name: openvpn-client
+    build: .
+    image: dceschmidt/openvpn-client
+    ports:
+     - "222:22"
