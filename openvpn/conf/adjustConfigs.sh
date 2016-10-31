@@ -13,38 +13,51 @@ normal=$(tput sgr0)
 # Just need to double check that the default.ovpn is still there and that the diff to origin looks reasonable.
 #
 
-display_usage() { 
+display_usage() {
 	echo "${bold}Hint: read the script before using it${normal}"
 	echo "If you just forgot: ./adjustConfigs.sh <provider-folder>"
 }
 
-# if no arguments supplied, display usage 
-if [  $# -lt 1 ] 
-then 
+# if no arguments supplied, display usage
+if [  $# -lt 1 ]
+then
 	display_usage
 	exit 1
 fi
 
 provider=$1
+providers=${provider}
 
-for configFile in $provider/*.ovpn;
-	do
-		if [[ -L ${configFile} ]]; then
-			continue # Don't edit symbolic links (default.ovpn)
-		fi
+if [[ "${provider}" == "all" ]]; then
+	providers="*"
+fi
 
-		# Absolute reference to ca cert
-		sed -i "s/ca .*\.crt/ca \/etc\/openvpn\/conf\/$provider\/ca.crt/g" "$configFile"
+for _provider in $providers; do
+	if [[ ! -d ${_provider} ]]; then
+		continue
+	fi
 
-		# Absolute reference to crl
-		sed -i "s/crl-verify.*\.pem/crl-verify \/etc\/openvpn\/conf\/$provider\/crl.pem/g" "$configFile"
+	for configFile in $_provider/*.ovpn;
+		do
+			if [[ -L ${configFile} ]]; then
+				continue # Don't edit symbolic links (default.ovpn)
+			fi
 
-		# Absolute reference to tls-auth
-		sed -i "s/tls-auth.*\.key/tls-auth \/etc\/openvpn\/conf\/$provider\/Wdc.key/g" "$configFile"
+			# Absolute reference to ca cert
+			sed -i "s/ca .*\.crt/ca \/etc\/openvpn\/conf\/$_provider\/ca.crt/g" "$configFile"
 
-		# Set user-pass file location
-		sed -i "s/auth-user-pass.*/auth-user-pass \/config\/openvpn-credentials.txt/g" "$configFile"
+			# Absolute reference to crl
+			sed -i "s/crl-verify.*\.pem/crl-verify \/etc\/openvpn\/conf\/$_provider\/crl.pem/g" "$configFile"
 
-	done
+			# Absolute reference to tls-auth
+			sed -i "s/tls-auth.*\.key/tls-auth \/etc\/openvpn\/conf\/$_provider\/Wdc.key/g" "$configFile"
 
-echo "Updated all .ovpn files in folder $provider"
+			# Set user-pass file location
+			sed -i "s/auth-user-pass.*/auth-user-pass \/config\/openvpn-credentials.txt/g" "$configFile"
+
+		done
+
+	echo "Updated all .ovpn files in folder $_provider"
+done
+
+exit
