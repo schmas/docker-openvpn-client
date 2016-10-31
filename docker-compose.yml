@@ -15,9 +15,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./tmp/config:/config
     environment:
-      OPENVPN_PROVIDER: PUREVPN
-      OPENVPN_USERNAME: username
-      OPENVPN_PASSWORD: password
+      OPENVPN_PROVIDER: EXPRESSVPN
+      OPENVPN_USERNAME: ""
+      OPENVPN_PASSWORD: ""
       OPENVPN_OPTS: "--inactive 3600 --ping 10 --ping-exit 60"
-      OPENVPN_CONFIG: VENEZUELA-UDP
+      OPENVPN_CONFIG: brazil_2_udp
       LOCAL_NETWORK: 10.0.0.0/24

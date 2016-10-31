@@ -3,9 +3,16 @@
 vpn_provider="$(echo $OPENVPN_PROVIDER | tr '[A-Z]' '[a-z]')"
 vpn_provider_configs="/etc/openvpn/conf/$vpn_provider"
 if [ ! -d "$vpn_provider_configs" ]; then
-	echo "Could not find OpenVPN provider: $OPENVPN_PROVIDER"
-	echo "Please check your settings."
-	exit 1
+	if [ "$vpn_provider" = "expressvpn" ]; then
+		vpn_provider_configs="/config/$vpn_provider"
+	fi
+
+	if [ ! -d "$vpn_provider_configs" ]; then
+		echo "Could not find OpenVPN provider: $OPENVPN_PROVIDER"
+		echo "Please check your settings."
+		exit 1
+	fi
+
 fi
 
 echo "Using OpenVPN provider: $OPENVPN_PROVIDER"
