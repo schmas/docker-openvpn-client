@@ -17,6 +17,7 @@ It bundles certificates and configurations for the following VPN providers:
 * Ivacy
 * IVPN
 * NordVPN
+* Perfect Privacy
 * Private Internet Access
 * PrivateVPN
 * PureVPN
