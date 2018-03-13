@@ -3,3 +3,4 @@ tmp
 .idea
 *.iml
 out
+.DS_Store
