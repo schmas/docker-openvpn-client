@@ -15,10 +15,19 @@ curl -kL https://www.privateinternetaccess.com/openvpn/openvpn.zip -o openvpn.zi
 # Ensure linux line endings
 dos2unix *
 
+case $(uname) in
+  Darwin)
+    SED=gsed
+    ;;
+  *)
+    SED=sed
+    ;;
+esac
+
 # Update configs with correct paths
-sed -i "s/ca ca\.rsa\.2048\.crt/ca \/etc\/openvpn\/pia\/ca\.rsa\.2048\.crt/" *.ovpn
-sed -i "s/crl-verify crl\.rsa\.2048\.pem/crl-verify \/etc\/openvpn\/pia\/crl\.rsa\.2048\.pem/" *.ovpn
-sed -i "s/auth-user-pass/auth-user-pass \/config\/openvpn-credentials.txt/" *.ovpn
+$SED -i "s/ca ca\.rsa\.2048\.crt/ca \/etc\/openvpn\/conf\/pia\/ca\.rsa\.2048\.crt/" *.ovpn
+$SED -i "s/crl-verify crl\.rsa\.2048\.pem/crl-verify \/etc\/openvpn\/conf\/pia\/crl\.rsa\.2048\.pem/" *.ovpn
+$SED -i "s/auth-user-pass/auth-user-pass \/config\/openvpn-credentials.txt/" *.ovpn
 
 # Create symlink for default.ovpn
 ln -s Netherlands.ovpn default.ovpn
