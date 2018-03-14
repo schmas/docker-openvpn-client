@@ -10,6 +10,10 @@ from zipfile   import ZipFile
 
 # URL of the GoldenFrog config file archive
 __url__ = "https://www.goldenfrog.com/openvpn/VyprVPNOpenVPNFiles.zip"
+# Default bit option, 160 or 256
+__default_bit__ = "256"
+# Default region, USA New York, symlink to default bit version
+__default_cfg__ = "USA New York.ovpn"
 
 # Get the working directory for output
 __this_dir__ = path.dirname(__file__)
@@ -63,9 +67,9 @@ with TemporaryDirectory() as dir:
                 f.write("\n".join(clean_out_lines))
 
             # Create a 'default' symlink for the 256 version
-            if ver == "256" and path.basename(file) != "ca.vyprvpn.com.crt":
+            if ver == __default_bit__ and path.basename(file) != "ca.vyprvpn.com.crt":
                 symlink(out_file, out_file.replace(" 256.ovpn", ".ovpn"))
 
 # Create the defaults
-symlink(path.join(__this_dir__, "ca.256.crt"), path.join(__this_dir__, "ca.crt"))
-symlink(path.join(__this_dir__, "USA - New York 256.ovpn"), path.join(__this_dir__, "default.ovpn"))
+symlink(path.join(__this_dir__, "ca.{}.crt".format(__default_bit__)), path.join(__this_dir__, "ca.crt"))
+symlink(path.join(__this_dir__, __default_cfg__), path.join(__this_dir__, "default.ovpn"))
