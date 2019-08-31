@@ -1,7 +1,6 @@
 client
 dev tun
 proto udp
-remote-random
 remote lu-ste.prod.surfshark.com 1194
 remote nl-ams-st001.prod.surfshark.com 1194
 remote nl-ams.prod.surfshark.com 1194
