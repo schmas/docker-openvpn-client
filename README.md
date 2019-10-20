@@ -21,7 +21,7 @@ It bundles certificates and configurations for the following VPN providers:
 * PrivateVPN
 * PureVPN
 * TigerVPN
-* TorGuard
+* TorGuard (**July, 2019 with OpenVPN 2.4**)
 * UsenetServerVPN
 
 ## Run container from Docker registry
